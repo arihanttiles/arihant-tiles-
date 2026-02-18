@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Arihant Tiles Catalog</title>
+<style>
+body{background:#111;color:gold;text-align:center;font-family:Georgia;}
+.tile{display:inline-block;background:#222;padding:15px;margin:15px;border-radius:10px;width:250px;}
+img{width:100%;border-radius:10px;}
+button{background:gold;border:none;padding:8px;margin-top:8px;}
+</style>
+</head>
+<body>
+
+<h1>Arihant Sanitary Tiles - Catalog</h1>
+
+<div id="tiles"></div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+var firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+};
+firebase.initializeApp(firebaseConfig);
+
+var db = firebase.firestore();
+
+db.collection("tiles").onSnapshot((snapshot)=>{
+  let output="";
+  snapshot.forEach((doc)=>{
+    let data=doc.data();
+    output+=`
+    <div class="tile">
+      <img src="${data.image}">
+      <h3>${data.name}</h3>
+      <p>Size: ${data.size}</p>
+      <p>Price: ₹ ${data.price}</p>
+      <button onclick="order('${data.name}')">Order on WhatsApp</button>
+    </div>`;
+  });
+  document.getElementById("tiles").innerHTML=output;
+});
+
+function order(name){
+  window.open("https://wa.me/919587079022?text=I want quotation for "+name);
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Arihant Secure Admin Panel</title>
+<style>
+body{background:#111;color:gold;text-align:center;font-family:Georgia;}
+input,button{padding:8px;margin:5px;}
+button{background:gold;border:none;}
+</style>
+</head>
+<body>
+
+<h1>Secure Admin Panel</h1>
+<button onclick="logout()">Logout</button>
+<hr>
+
+<input type="text" id="name" placeholder="Tile Name">
+<input type="text" id="size" placeholder="Tile Size">
+<input type="number" id="price" placeholder="Price">
+<input type="text" id="image" placeholder="Image URL">
+<br>
+<button onclick="addTile()">Add Tile</button>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+<script>
+var firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+};
+firebase.initializeApp(firebaseConfig);
+
+var db = firebase.firestore();
+
+// Protect Page
+firebase.auth().onAuthStateChanged(function(user){
+  if(!user){
+    window.location="login.html";
+  }
+});
+
+function addTile(){
+  db.collection("tiles").add({
+    name:document.getElementById("name").value,
+    size:document.getElementById("size").value,
+    price:document.getElementById("price").value,
+    image:document.getElementById("image").value
+  });
+  alert("Tile Added Successfully");
+}
+
+function logout(){
+  firebase.auth().signOut();
+}
+</script>
+
+</body>
+</html>
